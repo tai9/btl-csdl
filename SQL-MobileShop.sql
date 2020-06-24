@@ -67,7 +67,7 @@ CREATE TABLE HoaDon(
 	TienShip DECIMAL,
 	DiaChi NVARCHAR(100),
 	MaKhachHang VARCHAR(20),
-	Ma VARCHAR(20)
+	MaGG VARCHAR(20)
 
 	PRIMARY KEY(MaHoaDon)
 )
@@ -85,13 +85,13 @@ CREATE TABLE ChiTietHoaDon(
 GO
 
 CREATE TABLE MaGiamGia(
-	Ma VARCHAR(20) NOT NULL,
+	MaGG VARCHAR(20) NOT NULL,
 	SoLuong INT,
 	SotienGiam DECIMAL,
 	Code INT,
 	HanSuDung DATE
 
-	PRIMARY KEY(Ma)
+	PRIMARY KEY(MaGG)
 )
 GO
 ------------------------------------------------------------------------------------
@@ -101,16 +101,16 @@ ALTER TABLE dbo.SanPham ADD FOREIGN KEY(MaHang) REFERENCES dbo.Hang
 ALTER TABLE dbo.SanPham ADD FOREIGN KEY(MaNhaCungCap) REFERENCES dbo.NhaCungCap
 ALTER TABLE dbo.KhachHang ADD FOREIGN KEY(MaNhanVien) REFERENCES dbo.NhanVien
 ALTER TABLE dbo.HoaDon ADD FOREIGN KEY(MaKhachHang) REFERENCES dbo.KhachHang
-ALTER TABLE dbo.HoaDon ADD FOREIGN KEY(Ma) REFERENCES dbo.MaGiamGia
+ALTER TABLE dbo.HoaDon ADD FOREIGN KEY(MaGG) REFERENCES dbo.MaGiamGia
 ALTER TABLE dbo.ChiTietHoaDon ADD FOREIGN KEY(MaSanPham) REFERENCES dbo.SanPham
 ALTER TABLE dbo.ChiTietHoaDon ADD FOREIGN KEY(MaHoaDon) REFERENCES dbo.HoaDon
 GO
 ------------------------------------------------------------------------------------
 
 -- set up constraint
-ALTER TABLE dbo.SanPham ADD CONSTRAINT check_gia_sl CHECK (Gia >= 0 AND SoLuong >= 0)
-ALTER TABLE dbo.NhanVien ADD CONSTRAINT check_namsinh CHECK (NamSinhNV < YEAR(GETDATE()))
-ALTER TABLE dbo.MaGiamGia ADD CONSTRAINT check_sl_tien CHECK (SoLuong >= 0 AND SotienGiam >= 0)
+ALTER TABLE dbo.SanPham ADD CONSTRAINT check_gia_sl_sp CHECK (Gia >= 0 AND SoLuong >= 0)
+ALTER TABLE dbo.NhanVien ADD CONSTRAINT check_namsinhNV CHECK (NamSinhNV < YEAR(GETDATE()))
+ALTER TABLE dbo.MaGiamGia ADD CONSTRAINT check_sl_tien_mgg CHECK (SoLuong >= 0 AND SotienGiam >= 0)
 ALTER TABLE dbo.KhachHang ADD CONSTRAINT check_namsinhKH CHECK (NamSinhKH < YEAR(GETDATE()))
 ALTER TABLE dbo.HoaDon ADD CONSTRAINT check_tongtien_tienship CHECK (TongTien >= 0 AND TienShip >= 0)
 ------------------------------------------------------------------------------------
@@ -118,15 +118,15 @@ ALTER TABLE dbo.HoaDon ADD CONSTRAINT check_tongtien_tienship CHECK (TongTien >=
 -- Insert data into table
 --Hãng
 INSERT INTO dbo.Hang(MaHang,TenHang ) VALUES  ( 'MH01' ,N'Apple')
-INSERT INTO dbo.Hang VALUES  ( 'MH02' ,N'SamSung')
-INSERT INTO dbo.Hang VALUES  ( 'MH03' ,N'Realmi')
+INSERT INTO dbo.Hang VALUES  ( 'MH02' ,N'Samsung')
+INSERT INTO dbo.Hang VALUES  ( 'MH03' ,N'Realme')
 INSERT INTO dbo.Hang VALUES  ( 'MH04' ,N'Oppo')
 INSERT INTO dbo.Hang VALUES  ( 'MH05' ,N'VSmart')
 INSERT INTO dbo.Hang VALUES  ( 'MH06' ,N'Nokia')
 INSERT INTO dbo.Hang VALUES  ( 'MH07' ,N'Xiaomi')
 INSERT INTO dbo.Hang VALUES  ( 'MH08' ,N'LG')
-INSERT INTO dbo.Hang VALUES  ( 'MH09' ,N'Soni')
-INSERT INTO dbo.Hang VALUES  ( 'MH10' ,N'Huawie')
+INSERT INTO dbo.Hang VALUES  ( 'MH09' ,N'Sony')
+INSERT INTO dbo.Hang VALUES  ( 'MH10' ,N'Huawei')
 
 --Nhà Cung Cấp
 INSERT INTO dbo.NhaCungCap(MaNhaCungCap,TenNhaCungCap ,SDT ,DiaChiNCC)
@@ -135,7 +135,7 @@ INSERT INTO dbo.NhaCungCap VALUES  ('MNCC02', N'FPT' ,N'0993214243' ,N'32 - Nguy
 INSERT INTO dbo.NhaCungCap VALUES  ('MNCC03', N'FPT' ,N'0993201234' ,N'432 - Lê Văn Việt -Q.9 -Tp.HCM')
 INSERT INTO dbo.NhaCungCap VALUES  ('MNCC04', N'Phong Vũ' ,N'0993214340' ,N'450 - Lê Văn Việt -Q.9 -Tp.HCM')
 INSERT INTO dbo.NhaCungCap VALUES  ('MNCC05', N'Thế Giới di Động' ,N'0993214350' ,N'195 - Nguyễn Kim Thiện -Tp.BMT')
-INSERT INTO dbo.NhaCungCap VALUES  ('MNCC06', N'Thế Giới di Động' ,N'0993214377' ,N'77 - Phạm Thành Trung -Tp.PleiKu')
+INSERT INTO dbo.NhaCungCap VALUES  ('MNCC06', N'Thế Giới di Động' ,N'0993214377' ,N'77 - Phạm Thành Trung -Tp.Pleiku')
 INSERT INTO dbo.NhaCungCap VALUES  ('MNCC07', N'Thế Giới di Động' ,N'0993214312' ,N'12 - Nguyễn Tứ Tấn Tài - Tiền Giang')
 
 --Nhân viên
@@ -148,12 +148,12 @@ INSERT INTO dbo.NhanVien VALUES  ('NV05', N'Phạm Mỹ Ân' ,1996 ,0 ,N'0924533
 INSERT INTO dbo.NhanVien VALUES  ('NV06', N'Nguyễn Lê Thanh Mỹ' ,1992 ,0 ,N'0924533630' ,N'Quận 9 - Tp.HCM')
 
 --Mã Giảm Giá
-INSERT INTO dbo.MaGiamGia(Ma, SoLuong ,SotienGiam ,Code ,HanSuDung)
+INSERT INTO dbo.MaGiamGia(MaGG, SoLuong ,SotienGiam ,Code ,HanSuDung)
 VALUES  ('MGG01' ,30 ,500000 ,84001 ,'20200701')
-INSERT INTO dbo.MaGiamGia(Ma, SoLuong ,SotienGiam ,Code ,HanSuDung)
-VALUES  ('MGG02' ,20 ,250000 ,84002 ,'2020-09-20')
-INSERT INTO dbo.MaGiamGia(Ma, SoLuong ,SotienGiam ,Code ,HanSuDung)
-VALUES  ('MGG03' ,5 ,1000000 ,84003 ,'2020-08-20')
+INSERT INTO dbo.MaGiamGia(MaGG, SoLuong ,SotienGiam ,Code ,HanSuDung)
+VALUES  ('MGG02' ,20 ,250000 ,84002 ,'20200920')
+INSERT INTO dbo.MaGiamGia(MaGG, SoLuong ,SotienGiam ,Code ,HanSuDung)
+VALUES  ('MGG03' ,5 ,1000000 ,84003 ,'20200820')
 
 --Sản Phẩm
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
@@ -175,7 +175,7 @@ VALUES  ('MSP08', N'Sam Sung Galaxy Note 10+' ,17990000 ,100 ,'MNCC01' ,'MH08')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
 VALUES  ('MSP09', N'Sam Sung Galaxy Fold' ,50000000 ,50 ,'MNCC01' ,'MH05')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP010', N'XiaoMi Realmi 9' ,3990000 ,90 ,'MNCC05' ,'MH10')
+VALUES  ('MSP010', N'Xiaomi Realme 9' ,3990000 ,90 ,'MNCC05' ,'MH10')
 
 --Khách Hàng
 INSERT INTO dbo.KhachHang(MaKhachHang, TenKhachHang , NamSinhKH , DiaChiKH ,GioiTinh ,SDT ,MaNhanVien)
@@ -192,14 +192,14 @@ VALUES  ('MKH05',N'Nguyễn Ánh' ,1992 ,N'Quận 9-Tp.HCM' ,0 ,N'0363240621' ,'
 --Hóa Đơn
 -- Tổng tiền và tiền ship sẽ được tính sau (dùng hàm để tính) nên ở đây để NULL.
 -- Mã giảm giá (Ma) áp dụng cho đơn hàng xxx với tổng tiền trên xxx sẽ được tính sau (dùng hàm)
-INSERT INTO dbo.HoaDon(MaHoaDon,TongTien ,Ngay ,TienShip , DiaChi ,MaKhachHang ,Ma)
-VALUES  ('MHD01', NULL ,'2020-05-20' ,NULL ,N'Quận 9- Tp.HCM' ,'MKH01' ,NULL)
-INSERT INTO dbo.HoaDon VALUES  ('MHD02', NULL ,'2020-05-20' ,NULL ,N'Quận 2- Tp.HCM' ,'MKH04' ,NULL)
-INSERT INTO dbo.HoaDon VALUES  ('MHD03', NULL ,'2020-06-20' ,NULL ,N'Quận 5- Tp.HCM' ,'MKH05' ,NULL)
-INSERT INTO dbo.HoaDon VALUES  ('MHD04', NULL ,'2020-06-20' ,NULL ,N'Quận 10- Tp.HCM' ,'MKH02' ,NULL)
-INSERT INTO dbo.HoaDon VALUES  ('MHD05', NULL ,'2020-07-20' ,NULL ,N'Quận Phú Nhuận - Tp.HCM' ,'MKH03' ,NULL)
-INSERT INTO dbo.HoaDon VALUES  ('MHD06', NULL ,'2020-07-20' ,NULL ,N'Quận 2- Tp.HCM' ,'MKH05' ,NULL)
-INSERT INTO dbo.HoaDon VALUES  ('MHD07', NULL ,'2020-05-20' ,NULL ,N'Quận 2- Tp.HCM' ,'MKH04' ,NULL)
+INSERT INTO dbo.HoaDon(MaHoaDon,TongTien ,Ngay ,TienShip , DiaChi ,MaKhachHang ,MaGG)
+VALUES  ('MHD01', NULL ,'20200520' ,NULL ,N'Quận 9- Tp.HCM' ,'MKH01' ,NULL)
+INSERT INTO dbo.HoaDon VALUES  ('MHD02', NULL ,'20200520' ,NULL ,N'Quận 2- Tp.HCM' ,'MKH04' ,NULL)
+INSERT INTO dbo.HoaDon VALUES  ('MHD03', NULL ,'20200620' ,NULL ,N'Quận 5- Tp.HCM' ,'MKH05' ,NULL)
+INSERT INTO dbo.HoaDon VALUES  ('MHD04', NULL ,'20200620' ,NULL ,N'Quận 10- Tp.HCM' ,'MKH02' ,NULL)
+INSERT INTO dbo.HoaDon VALUES  ('MHD05', NULL ,'20200720' ,NULL ,N'Quận Phú Nhuận - Tp.HCM' ,'MKH03' ,NULL)
+INSERT INTO dbo.HoaDon VALUES  ('MHD06', NULL ,'20200720' ,NULL ,N'Quận 2- Tp.HCM' ,'MKH05' ,NULL)
+INSERT INTO dbo.HoaDon VALUES  ('MHD07', NULL ,'20200520' ,NULL ,N'Quận 2- Tp.HCM' ,'MKH04' ,NULL)
 
 --Chi Tiết Hóa Đơn
 -- Thành tiền = số lượng * đơn giá
