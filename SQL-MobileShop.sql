@@ -161,21 +161,21 @@ VALUES  ('MSP01', N'Iphone X' ,15000000 ,100 ,'MNCC01' ,'MH01')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
 VALUES  ('MSP02', N'Iphone 7' ,10000000 ,70 ,'MNCC02' ,'MH01')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP03', N'Iphone 8' ,12000000 ,80 ,'MNCC06' ,'MH07')
+VALUES  ('MSP03', N'Iphone 8' ,12000000 ,80 ,'MNCC06' ,'MH01')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP04', N'Iphone 11' ,25000000 ,110 ,'MNCC03' ,'MH08')
+VALUES  ('MSP04', N'Iphone 11' ,25000000 ,110 ,'MNCC03' ,'MH01')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP05', N'Sam Sung Galaxy A01' ,2790000 ,100 ,'MNCC05' ,'MH10')
+VALUES  ('MSP05', N'Sam Sung Galaxy A01' ,2790000 ,100 ,'MNCC05' ,'MH02')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP06', N'Sam Sung Galaxy A10s' ,3690000 ,100 ,'MNCC07' ,'MH04')
+VALUES  ('MSP06', N'Sam Sung Galaxy A10s' ,3690000 ,100 ,'MNCC07' ,'MH02')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP07', N'Sam Sung Galaxy S20 ultra' ,25900000 ,100 ,'MNCC04' ,'MH06')
+VALUES  ('MSP07', N'Sam Sung Galaxy S20 ultra' ,25900000 ,100 ,'MNCC04' ,'MH02')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP08', N'Sam Sung Galaxy Note 10+' ,17990000 ,100 ,'MNCC01' ,'MH08')
+VALUES  ('MSP08', N'Sam Sung Galaxy Note 10+' ,17990000 ,100 ,'MNCC01' ,'MH02')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP09', N'Sam Sung Galaxy Fold' ,50000000 ,50 ,'MNCC01' ,'MH05')
+VALUES  ('MSP09', N'Sam Sung Galaxy Fold' ,50000000 ,50 ,'MNCC01' ,'MH02')
 INSERT INTO dbo.SanPham(MaSanPham,TenSanPham ,Gia ,SoLuong ,MaNhaCungCap , MaHang)
-VALUES  ('MSP010', N'Xiaomi Realme 9' ,3990000 ,90 ,'MNCC05' ,'MH10')
+VALUES  ('MSP010', N'Xiaomi Realme 9' ,3990000 ,90 ,'MNCC05' ,'MH07')
 
 --Khách Hàng
 INSERT INTO dbo.KhachHang(MaKhachHang, TenKhachHang , NamSinhKH , DiaChiKH ,GioiTinh ,SDT ,MaNhanVien)
@@ -256,5 +256,35 @@ SELECT * FROM dbo.NhaCungCap
 SELECT * FROM dbo.SanPham
 SELECT * FROM dbo.KhachHang
 SELECT * FROM dbo.NhanVien
+GO
+
+--Tính tổng tiền của hóa đơn
+SELECT MaHoaDon, SUM(SP.Gia *CT.SoLuong) AS'Tong tien'
+FROM dbo.ChiTietHoaDon CT, dbo.SanPham SP
+WHERE CT.MaSanPham = SP.MaSanPham
+GROUP BY CT.MaHoaDon
+
+-- THành tiền của CTHD
+SELECT MaHoaDon ,MaChiTietHD, CT.MaSanPham , SP.Gia* CT.SoLuong AS'Thanh Tien'
+FROM dbo.ChiTietHoaDon CT, dbo.SanPham SP
+WHERE CT.MaSanPham = SP.MaSanPham
+GO
+
+-- Tìm khách hàng thông qua mã khách hàng trong bảng hóa đơn
+SELECT KH.MaKhachHang, KH.TenKhachHang, KH.NamSinhKH, KH.DiaChiKH, KH.GioiTinh, KH.SDT     	
+FROM dbo.KHACHHANG  KH, dbo.HOADON HD 	
+WHERE  KH.MaKhachHang = HD. MaKhachHang
+GO
+
+-- Xuất ra các khách hàng có họ Nguyễn.
+SELECT *
+FROM dbo.KhachHang
+WHERE TenKhachHang LIKE N'Nguyễn%'
+GO
+
+-- Tìm Nhân viên thông qua mã nhân viên trong bảng khách hàng
+SELECT NV.MaNhanVien, NV.TenNhanVien, NV.NamSinhNV, NV.GioiTinh, NV.SDT, NV.DiaChi
+FROM  dbo.KHACHHANG KH, dbo.NHANVIEN NV
+WHERE NV.MaNhanVien  =  KH.MaNhanVien
 GO
 ------------------------------------------------------------------------------------
