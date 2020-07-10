@@ -288,5 +288,20 @@ SELECT NV.MaNhanVien, NV.TenNhanVien, NV.NamSinhNV, NV.GioiTinh, NV.SDT, NV.DiaC
 FROM  dbo.KHACHHANG KH, dbo.NHANVIEN NV
 WHERE NV.MaNhanVien  =  KH.MaNhanVien
 GO
+------------------------------------------------
 
---
+-- Cập nhật thành tiền cho chi tiết hóa đơn
+UPDATE dbo.ChiTietHoaDon
+SET ThanhTien = (
+	SELECT dbo.ChiTietHoaDon.SoLuong * dbo.SanPham.Gia
+	FROM dbo.SanPham
+	WHERE dbo.ChiTietHoaDon.MaSanPham = dbo.SanPham.MaSanPham
+)
+
+-- Cập nhật tổng tiền cho hóa đơn
+UPDATE dbo.HoaDon
+SET TongTien = (
+	SELECT SUM(ThanhTien)
+	FROM dbo.ChiTietHoaDon
+	WHERE MaHoaDon = dbo.HoaDon.MaHoaDon
+)
